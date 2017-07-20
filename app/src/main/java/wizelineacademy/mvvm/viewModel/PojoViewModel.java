@@ -1,5 +1,7 @@
 package wizelineacademy.mvvm.viewModel;
 
+import android.view.View;
+
 import wizelineacademy.mvvm.model.Pojo;
 import wizelineacademy.mvvm.model.DataBase;
 
@@ -11,25 +13,37 @@ public class PojoViewModel extends ViewModel {
     private Pojo item;
     private DataBase dataBase;
 
+    private String message;
+
     public PojoViewModel(DataBase dataBase) {
         this.dataBase = dataBase;
+        setItem(dataBase.getSavedPojo());
     }
 
     public void setItem(Pojo item) {
         this.item = item;
+        this.message = item.getMessage();
     }
 
-    public String getCapitalizedMessage(){
-        String message = capitalizeFirstLetters(item.getMessage());
-        return message;
+    public String getMessage() {
+        return capitalizeFirstLetters(item.getMessage());
     }
 
-    public void updateMessage(String message){
+    public void setMessage(String message) {
         item.setMessage(message);
-        dataBase.updatePojo(item);
     }
 
-    private String capitalizeFirstLetters(String text){
+    public void updateMessage(View view) {
+        if (!capitalizeFirstLetters(message).equals(item.getMessage())) {
+            dataBase.updatePojo(item);
+        }
+    }
+
+    private String capitalizeFirstLetters(String text) {
+        if (text.isEmpty()) {
+            return "";
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
 
         String[] words = text.split(" ");

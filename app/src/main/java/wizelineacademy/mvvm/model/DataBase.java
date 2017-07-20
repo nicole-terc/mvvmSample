@@ -1,5 +1,7 @@
 package wizelineacademy.mvvm.model;
 
+import android.content.SharedPreferences;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,17 +10,38 @@ import java.util.List;
  */
 
 public class DataBase {
-    public List<Pojo> getSavedPojos(){
+    private static final String POJO_MESSAGE = "pojoMessage";
+
+    SharedPreferences preferences;
+
+    public DataBase(SharedPreferences preferences) {
+        this.preferences = preferences;
+    }
+
+    public List<Pojo> getSavedPojos() {
         List<Pojo> list = new ArrayList<>();
         // retrieve pojo list from local storage
         return list;
     }
 
-    public void savePojo(Pojo pojo){
-        // Save Pojo in database
+    public Pojo getSavedPojo() {
+        //Load from database
+        String message = preferences.getString(POJO_MESSAGE, "");
+
+        Pojo pojo = new Pojo();
+        pojo.setMessage(message);
+
+        return pojo;
     }
 
-    public void updatePojo(Pojo pojo){
+    public void savePojo(Pojo pojo) {
+        // Save Pojo in database
+        String message = pojo.getMessage();
+        preferences.edit().putString(POJO_MESSAGE, message).apply();
+    }
+
+    public void updatePojo(Pojo pojo) {
         // Update Pojo in database
+        savePojo(pojo);
     }
 }
