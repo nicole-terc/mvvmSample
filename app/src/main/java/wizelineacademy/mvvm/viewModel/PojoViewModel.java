@@ -1,5 +1,6 @@
 package wizelineacademy.mvvm.viewModel;
 
+import android.databinding.Bindable;
 import android.view.View;
 
 import wizelineacademy.mvvm.model.Pojo;
@@ -25,6 +26,7 @@ public class PojoViewModel extends ViewModel {
         this.message = item.getMessage();
     }
 
+    @Bindable
     public String getMessage() {
         return capitalizeFirstLetters(item.getMessage());
     }
@@ -36,6 +38,7 @@ public class PojoViewModel extends ViewModel {
     public void updateMessage(View view) {
         if (!capitalizeFirstLetters(message).equals(item.getMessage())) {
             dataBase.updatePojo(item);
+            notifyPropertyChanged();
         }
     }
 
